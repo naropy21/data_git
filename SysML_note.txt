@@ -1,0 +1,335 @@
+﻿
+Flow Ports
+- format : name : type
+- nonatomic flow ports : type이 flow specification이어야 한다.
+- flow property : 특정 아이템을 표현
+	-> <direction> <name> : <type>		// type : value type, block, signal
+	dataOut:~Housekeeping Data	// DataOut flow port is conjugated 임을 의미, 즉 Housekeeping Data flow specification에서 
+	flow properties의 방향이 반대가 됨을 의미한다.
+	
+- atomic flow ports
+	-> flow port를 지나는 single item type을 모델링할 필요가 있을 때 사용.
+
+3.4.2 Behavioral Fetures
+operations와 receptions의 2 종류를 제공한다.
+operations : call event에 의해 호출된다.
+	-> synchronous behavior를 표현한다.
+	<operation name> (<parameter list>) : <return type> [<multiplicity>]		// return type : value type, block
+		-> parameter display
+				<direction> <parameter name> : <type> [<multiplicity>] = <default value>
+	
+receptions : signal event에 의해 호출된다.
+	-> client가 trigger를 수행할 signal을 보낼 때 block이 수행하는 behavior를 표현
+	-> 항상 asynchronous behavior를 표현한다.
+	signal : matter, energy, 또는 system이 다른 part에 보낼 data에 대한 type을 표현한다.
+	<<signal>> <reception name> ( <parameter list> )
+		-> parameter display
+			<parameter name> : <type> [<multiplicity>] = <default value>	// type : value type, block
+	-> reception들은 return type을 가질 수 없다.
+	-> reception parameter들은 오로지 input만 가능한다.
+
+3.5 Associations: Another Notation for a Property
+	두 block들 사이에는 3종류의 relationship이 존재할 수 있다. : associations, generalizations, dependencies
+3.5.1 reference associations
+	두 블럭의 instance들 사이에 connection이 존재함을 의미한다.
+	reference association의 표기는 두 block들 사이에 solid line으로 표기한다.
+	unidirectional access : 한쪽 끝을 open arrowhead로 표기
+	bidirectional access : 양쪽 끝에 arrowhead가 존재하지 않음.
+	association name : 라인의 한 가운데에 표기
+	role name and multiplicity : 옵션으로 라인의 끝에 표기, role name은 reference property name에 해당한다.
+	하나 이상의 connector들에 대한 type으로 제공할 수 있다.
+	IBD에서 connector는 usage element로 표현된다.
+3.5.2 composite associations
+	structural decomposition을 전달한다.
+	표기는 composite end에 solid diamond를 가진 solid line으로 표기한다.
+	라인의 part end에 open arrowhead는 composite으로부터 part까지 unidirectional access를 전달하고자 할 때 표기한다.
+	role name은 part property의 name에 해당한다.
+	composite association의 composite end의 default multiplicity는 0..1이다.
+	
+3.6 Generalizations
+	두 element들 사이에 inheritance를 전달한다.
+	generalization은 supertype의 끝에 hollow,triangular arrowhead를 가진 solid line으로 표시된다.
+	"is a type of"
+	abstractions를 정의하기 위하여 generalizations를 만든다.
+	abstractions은 common feature를 정의하고자 할 때 사용한다.
+	abstraction은 substitutability를 전달한다.
+	extensibility를 제공한다.
+
+3.7 Dependencies
+	supplier element가 변할 때 client element가 변해야 할 수도 있다는 것을 전달한다.
+	model element들 사이에 traceability를 수립하고자 할 때 생성한다.
+	automated downstream impact analysis를 수행할 수 있게 한다.
+	표기는 client로부터 supplier로 open arrowhead를 가진 dashed line이다.
+
+3.8 Actors
+	person, organization, 또는 system과 상호작용하는 another system에 의해 play되는 role을 전달한다.
+	stick figure와 키워드 <<actor>>를 가진 Recangle로 표기한다.
+	actor와 block사이에는 generalization을 정의할 수 없다.
+	actor는 part들을 가질 수 없다. actor는 "black box"로 간주한다.
+	
+3.9 Value Types
+	value type은 quantity type을 정의하는 definition element이다.
+	value property로서 자주 사용되지만 그외 다음과 같은 용도로 사용된다.
+		- Atomic flow ports on blocks and actors
+		- Flow properties in flow specifications
+		- Constraint parameters in constraint blocks
+		-	Item flows and item properties on connectors
+		- Return types of operations
+		- Parameters of operations and receptions
+		- Object nodes, pins, and activity parameters within activities
+	primitive, structured, 그리고 enumerated의 3종류 value type이 있다.
+	primitive
+		- stereotype <<vlaueType>>을 가진 rectangle로 표기된다.
+		- SysML에서는 String, Boolean, Integer, real 4가지 type이 있다.
+		- 4가지 type의 specializations(subtypes)으로서 정의하여 사용가능하다.
+	structured
+		- internal structure를 가진 value type을 말한다.
+		- SysML은 realPart와 imaginaryPart 2개의 value properties를, Complex value type을 정의하고 있다.
+	enumerated
+		- literals의 set을 정의한다.
+	value type들은 generalization을 사용하여 서로 관계지을 수 있다.
+
+3.10 Constraint Blocks
+	Boolean constraint expression을 정의하는 definition element이다.
+	constraint block에서 가장 자주 사용되는 constraint expression은 equation 또는 inequality이다.
+		- operational system에서 valid system values에 관한 assertion들을 구체화하기 위하여
+		- life cycle의 design단계에서 enginnering analyses를 수행하기 위하여
+	constraint expression에서 variable들은 constraint parameters로 불리운다.
+	일반적으로 quantities를 표현하며 value type들에 의해 자주 type된다.
+	constraint block은 stereotype <<constraint>> 를 가진 rectangle로 표기된다.
+	constraint expression은 항상 curly brackets({})안에 표현된다.
+	보다 복잡한 constraint block은 구성 part들을 constraint properties의 리스트로서 표시할 수 있다.
+		- constraint property는 format name : type을 가진 name과 type을 가진다.
+		- 여기서, type은 constraint block의 name이다.
+	constraints compartment 표기의 대안으로 composite associations를 사용할 수 있다.
+			
+3.11 Comments
+	diagram에 대한 정보를 표현하고자 할 때 text block을 사용한다.
+	comment의 표기는 주로 note symbol(오른쪽 위 corner 부분이 구부러져 있는 사각형)을 사용한다.
+	comment를 다른 elememt들에 attach하고자 할 때는 dashed line을 사용한다.
+	modeler는 때때로 reader가 관련 diagram을 빨리 확인할 수 있도록 diagram에 hyperlink를 가진 freestanding comment를 사용한다.
+	SysML은 특별한 comments(rationale, problem, diagram description)을 정의한다.
+
+
+4. Internal Block Diagrams
+4.1 Purpose
+	single block의 internal structure를 구체화하기 위하여 생성한다.
+	BDD와 마찬가지로 IBD는 system 또는 part들의 static view이다.
+	BDD와는 달리 block들은 표시하지 않고, block들의 usage를 표시한다.
+	BDD에서 전달할 수 없는 추가적인 information을 전달하기 위하여 사용한다.
+		- the connections among part properties and reference properties
+		- the types of matter, energy, or data that flow across the connections
+		- the services that are provided and required across the connections.
+	IBD는 block의 part들이 어떻게 assemled되어야 하는지를 전달한다.
+	IBD는 그 block의 instance가 어떻게 외부 entities(reference properties)에 연결되어야 하는지를 보여준다.		
+	IBD는 어느 part들이 서로 연결되어야만 하는 지를 모델링할 수 있게 해준다.
+	
+4.2 When Should You Create an IBD?
+	BDD : block과 block properties를 정의
+	IBD : block의 valid configuration를 표시한다.
+		즉, block properties사이의 connections들의 specific set을 표시한다.
+
+4.3 Blocks, Revisited
+			   
+4.4 The IBD Frame
+	IBD에 이용가능한 model element type은 오로지 Block만 가능하다.
+
+4.5 BDDs and IBDs : Complementary Views of a Block
+
+4.6 Part Properties
+	block이 구성하고 있는 structure를 표현한다.
+	IBD에서 part property에 대한 표기는 solid border를 가진 rectangle이다.
+	<part name> : <type> [<multiplicity>]
+	
+4.7 Reference Properties
+	IBD header의 block name의 외부 structure를 표현한다.
+	표기는 solid border를 가진 rectangle이다.
+	<reference name> : <type> [<multiplicity>]
+
+4.8 Connectors
+	<connector name> : <type>
+
+4.9 Item Flows
+	item flow는 matter, energy 또는 시스템 내 두 structure들 사이에 흐르는 data의 type을 나타낸다.
+	표기는 두 flow port를 연력하는 connector에서 filled-in triangular arrowhead로 나타낸다.
+
+4.10 Nested Parts and References
+	IBD는 다른 properties내에 nested되어 있는 properties를 표시한다.
+	4.10.1 Dot Notation
+	4.10.2 Connecting Nested Properties
+
+
+5. Use Case Diagrams
+5.1 Purpose
+	use cases의 집합(시스템이 제공하는 외부에서 볼 수 있는 services)들을 전달한다.
+	use case diagram은 시스템의 blackbox view이다. 그런 까닭에 system context diagram으로 제공하기에 적합하다.
+		
+5.2 When Should You Create a Use Case Diagram?
+	- operation들에 대한 system concept(ConOps)을 개발하고자 할 때
+	- requirement 도출과 system life cycle의 specification 단계에서 text-based functional requirements 대신에 use cases을 생성
+	- System architects는 architectural design단계 동안에 subsystem-and component-level use cases를 도출 및 allocation하기 위하여
+	  system-level use cases를 분석하게 된다.
+	  
+5.3 Wait! What's a Use Case?
+	- In The Unified Modeling Language Reference Manual, second edition,
+		use case definition : “specification of sequences of actions, including variant sequences
+		and error sequences, that a system, subsystem, or class can perform by
+		interacting with outside objects to provide a service of value.”
+	- Writing Effective Use Cases,
+		use case는 system behavior에 관한 system stakeholder들 사이에 contract를 끌어 모은다.
+	system의 use cases를 열거할 때 명심해야 할 key ideas는 다음과 같다.
+		- A use case is a service--a behavior--that your system will perform. 그런 까닭에 use case name은 항상 동사구을 사용한다.
+		- 시스템이 수행하는 모든 behavior가 use case는 아니다. 더 정확히 말하면, use cases는 external actor들이 직접 invoke하거나
+			참여할 수 있는 system behavior들의 부분집합이다.
+		- actor는 시스템과 interface로 접속하는 person이거나 외부 system일 수 있다.
+		- use case들을 invoke하는 actor들은 primary actors라고 부른다.
+			use case에 참여할 수 있는 actor들은 secondary actor라고 부른다.
+			primary actor 또한 secondary actor가 될 수 있다.
+		- 각각의 use case는 primary actor의 goal을 표현해야 한다. 시스템이 아닌 actor의 관점에서 use case name을 작성한다.
+		- use case name은 많은 정보를 전달하지 않는다.
+			system과 system actor들이 use case goal을 달성하기 위하여 어떻게 협력하는지를 묘사하기 위해서
+      각각의 use case에 대한 use case specification을 만든다.
+	5.3.1 Use Case Specifications
+		use case specification은 primary actor가 use case를 호출할 때 펼쳐지는 이야기를 전달한다.
+		use case specification은 다음과 같은 형태의 text document가 주로 사용된다.
+			- Use case name: a verb phrase
+			- Scope: the entity that owns (provides) the use case (for example,
+				the name of an organization, system, subsystem, or component)
+			- Primary actor: the actor that invokes the use case (the actor whose goal the use case represents)
+			- Supporting (secondary) actors: actors that provide a service to
+				the system (participate in the use case by performing actions)
+			- Stakeholder: someone or something with a vested interest inthe behavior of the system
+			- Preconditions: the conditions that must be true for this use case to begin
+			- Guarantees (postconditions): the conditions that must be true at the end of the use case
+			- Trigger: the event that gets the use case started
+			- Main success scenario: the scenario (the sequence of steps) in which nothing goes wrong
+			- Extensions (alternative branches): alternative sequences of steps branching off of the main success scenario
+			- Related information: whatever your project needs for additional information
+		SysML activity diagram을 사용하여 graphical use case specification을 생성하는 것도 가능하다.
+			- activity diagram은 text형태의 use case specification보다 간결하고 애매모호함이 덜하다.
+		You will know that a use case is at an appropriate level of granularity
+		when it has exactly one main success scenario. All other paths of
+		execution through the use case specification should be error or exception sequences.
+	5.3.2 Use Cases versus Scenarios
+		Use case와 scenario는 동의어가 아니다. use case는 하나 이상의 scenario로 구성되어 있다.
+		SysML sequence diagram은 sigle scenario를 그래픽컬하게 표현하기에 잘 어울린다.
+
+5.4 The Use Case Diagram Frame
+	diagram kind abbrevation은 uc이다.
+	diagram frame이 표현하는 model element type은 다음 중에서 임의의 하나일 수 있다.
+		- package
+		- model
+		- modelLibrary
+		- view
+
+5.5 Use Cases
+	use case에 대한 표기는 ellipse를 사용한다.
+	use case name은 elipse 내부 또는 아래에 동사구로 나타낼 수 있다.
+	block과 마찬가지로, use case도 generalization relationship을 나타냄으로써 generalized and specialized될 수 있다.
+
+5.6 System Boundary
+	system boundary( also called the subject)는 diagram상에서 use case를 소유하고 수행하는 system을 표현한다.
+	system boundary 표기는 use case들을 애워싸는 Rectangle이다.
+	subject name( rectangle 내부 상단에 보여지는)은 항상 명사구이어야 한다.
+
+5.7 Actors
+	Actor는 2가지의 표기법이 있다.
+		(1)	stick figure : person을 표현할 때 사용
+		(2) keyword <<actor>> 다음에 actor name이 오는 Rectangle : system을 표현할 때 사용
+	BDD와 마찬가지로, use case diagram에서 actor들 사이에도 generalization을 나타낼 수 있다.
+		- 만약 supertype이 use case와 함께 association을 가진다면, subtype 또한 그 association을 상속하고 그 use case에 대한 access를 가진다.
+
+5.8 Associating Actors with Use Cases
+	system operation동안에 association element의 instance들 사이에 link가 존재할 수 있다.
+	use case diagram에서 다음과 같은 association을 가지지 않도록 해야 한다.
+		-	You cannot create a composite association between an actor and a use case.
+		- You cannot create an association (of any kind) between two actors.
+		- You cannot create an association (of any kind) between two use cases.		
+
+5.9 Base Use Cases
+	base use case는 association relationship을 통하여 primary actor에 연결된 임의의 use case이다.
+	다시말하면, base use case는 primary actor의 goal을 표현하는 use case임을 의미한다.
+
+5.10 Included Use Cases
+	included use case는 include relationship의 target(arrowhead end에서 element)인 use case이다.
+	include relationship에 대한 표기는 relationship 옆에 keyword <<include>>와 open arrowhead를 가진 dashed line으로 표현된다.
+	include relationship의 표기가 dependency relationship과 유사함에도 불구하고,
+	include relationship은 dependency와는 다른 종류이다.
+	include relationship은 source end에서의 use case(relationship의 tail end)가 invoke될 때,
+	target end에서의 use case 또한 실행되는 것을 전달한다.
+	달리 말하면, included use case behavior는 source end에서 use case의 required part이다.
+	하나의 use case에서 다른 use case사이에는 include relationship만을 사용할 수 있다.
+	included use case는 가급적이면 피하는 것이 좋다.
+	included use case는 몇개의 base use case들로부터 뽑아낼 수 있는 common behavior 덩어리를 표현하고자 할 때만 생성하여야 한다.
+	절대로 primary actor와 included use case사이에 association relationship을 만들어서는 안된다.
+	primary actor는 goals를 표현하는 base use cases에만 연관되어야 한다.
+
+5.11 Extending Use Cases
+	extending use case는 extend relationship의 source(tail end에서 element)인 임의의 use case이다.
+	extend relationship에 대한 표기는 relationship 옆에 keyword <<extend>>와 open arrowhead를 가진 dashed line으로 표시한다.
+	include relationship과 마찬가지로, extend realtionship은 표기가 유사함에도 불구하고 dependency와는 다른 종류이다.
+	더 정확히 말하면, extend relationship은 target end에서 use case(relationship의 arrowhead end)가 invoke될 때,
+	source end에서 extending use case 또한 optionally 실행될 수 있음을 전달한다.
+	달리 말하면, extend relationship의 target end에서의 use case가 그것만으로 완벽하다는 것을 의미한다.
+	또한 extending use case가 target use case의 behavior 내에서 분기하는 extension point를 구체화할 수 있으며,
+	그 extension point는 target use case의 compartment에서 named된다.
+	extending use case도 사용을 가급적이면 삼가하는 것이 좋다.
+	use case diagram은 가능한 한 분명하게 유지하고 extending use case의 모든 세부내용들(extension point and triggering condition)은 
+	target use case와 연관된 activity diagram에서 구체화하는 것이 좋다.
+	activity diagram은 extension point에 해당하는 decision node를 포함하게 되고,
+	extending use case behavior는 그 decision node로부터 분기하게 된다.
+	몇개의 base use cases가 같은 optional behavior를 포함하고 있다는 것을 인지하게 될 때,
+	그 common behavior 덩어리를 뽑아내서 그것을 extending use case로서 표현한다.
+	
+
+6. Activity Diagrams
+6.1 Purpose
+	activity diagram은 behavior diagram의 일종이다.
+	activity diagrams, sequence diagrams, 그리고 state machine diagram은 SysML이 system behavior를 구체화하기 위하여 제공하는 3가지 option들이다.
+	activity diagram은 object들(matter, energy, or data)의 flow을 behavior를 통하여 
+	system operation동안에 objects가 어떻게 그 behavior의 실행에서 accessed and modified될 수 있는 지에 Focus를 두고
+	표현하고자 할 때 유익하다.
+	activity diagram은 복잡한 control logic을 sequence diagram and state machine diagram보다 더 잘 표현할 수 있다.
+	activity diagram은 유일하게 continuous system behaviors를 표현할 수 있다.
+	activity diagram은 problem space를 정의하고 시스템의 required behavior를 구체화하기 위하여 stakeholders와 함께 작업할 때 
+	analysis tool로서 유용하다. ( first kind of behavior diagram )
+	activity diagram은 특별히 system implementation에 적합한 detailed design을 위해서는 유용하지 않다.
+	
+6.2 When Should You Create an Activity Diagram?
+	stakeholders와 communication하고 system과 actors의 expected behaviors를 capture하고자 할 때
+	팀의 다른 멤버들과 communication하고 시스템의 internal parts에 대한 expected behaviors를 capture하고자 할 때
+	graphical use case specifications를 제공하고자 할 때
+
+6.3 The Activity Diagram Frame
+	diagram kind abbreviation은 act이다.
+	activity diagram을 위한 유일한 model element type은 activity이다.
+	activity diagram의 frame은 system model에서 어딘가에 정의된 single activity를 항상 표현한다.
+	activity는 그 자체로 model element이다.
+	activity와 activity diagram은 동의어가 아니다.
+		 	
+6.4 A Word about Token Flow
+	Token flow는 abstract concept이다. 
+	Tokens는 model elements가 아니다.
+	object tokens
+		- activity를 통하여 흐르는 matter, energy, or data의 instance를 표현한다.
+		- object token은 model hierarchy 어딘가에 생성한 block, value type, or signal의 instance를 표현한다.
+			(to define a type of matter, energy, or data)
+		- multiple object tokens가 존재할 수 있다.
+	control tokens
+		- control token은 아무것도 표현하지 않는다.
+		- control token은 type(block, value type, or signal)이 없다.
+		- control token은 단순히 activity 실행 동안에 특정 순간에 activity에서 어느 action이 현재 enabled되어 있는 지를 가르킨다.
+
+6.5 Actions: The Basics
+	action은 activity내에 존재할 수 있는 node의 한 종류이다.
+	action은 system operation동안 activity가 실행할 때 발생할 processing or transformation의 어떤 형태를 표현한다.
+	basic action에 대한 표기는 round-cornered rectangle(round-angle)로 나타낸다.
+	action은 주로 동사구로 표현한다.
+	action은 natural language에 대한 대안으로 formal languages(C, JAVA, Verilog, or Modelica)를 사용할 수 있다.
+	SysML은 그와 같은 statement를 opaque expression이라고 부른다.
+	opaque expression은 두개의 parts를 가진다 : a language and the body
+	language는 curly brackets({})안에 구체화하고 다음에 body가 온다.
+
+6.6 Object Nodes
+	
+			
